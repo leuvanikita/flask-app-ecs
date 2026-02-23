@@ -1,0 +1,9 @@
+
+services:
+
+  flask-app:
+    image: niki0303/flask-app:mini
+    container_name: flask-app
+    ports:
+      - "81:80"
+
