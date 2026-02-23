@@ -1,0 +1,27 @@
+#--------------------Stage 1---------------------------
+
+FROM python:3.14-alpine AS builder
+
+WORKDIR /app 
+
+COPY requirements.txt ./requirements.txt  
+
+RUN pip install -r requirements.txt --target /app/libs
+
+COPY . .
+
+#--------------------Stage 2---------------------------
+
+FROM gcr.io/distroless/python3-debian12
+
+WORKDIR /app
+
+COPY --from=builder /app/libs /app/libs
+
+COPY --from=builder /app .
+
+ENV PYTHONPATH="/app/libs"
+
+EXPOSE 80
+
+CMD ["run.py"]
